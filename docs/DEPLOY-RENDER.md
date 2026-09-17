@@ -42,12 +42,13 @@ built Next.js app, which also hosts the Payload admin at `/admin`.
 
 1. **New → Web Service** → connect the repo.
 2. Settings:
+   - **Root Directory:** leave **empty** (the unified server runs from the repo root)
    - **Runtime:** Node
-   - **Build Command:** `npm run build:render`
+   - **Build Command:** `npm install && npm install --prefix backend && npm install --prefix frontend && npm run build:render`
    - **Start Command:** `npm run start:all`
    - **Health Check Path:** `/api/health`
-   - **Instance Type:** Starter or higher (needed for the persistent disk)
-3. **Disks → Add disk:** mount path `/opt/data`, size 1 GB.
+   - **Instance Type:** Starter or higher (needed for the persistent disk — Free cannot mount disks, so your data would be wiped on every deploy)
+3. **Advanced → Add Disk:** mount path `/opt/data`, size 1 GB.
 4. Add the environment variables below, then **Create Web Service**.
 
 ---

@@ -17,8 +17,9 @@ services:
     branch: main
     autoDeploy: true
     # Build and start commands — one repo, one service, no separate
-    # frontend/backend deploys.
-    buildCommand: npm run build:render
+    # frontend/backend deploys. NOTE: installs must cover all three packages
+    # (root, backend, frontend) — Render's auto-install only covers the root.
+    buildCommand: npm install && npm install --prefix backend && npm install --prefix frontend && npm run build:render
     startCommand: npm run start:all
     healthCheckPath: /api/health
     # Render rotates instances on deploy; only ONE instance may run the
@@ -35,6 +36,8 @@ services:
       mountPath: /opt/data
       sizeGB: 1
     envVars:
+      - key: NODE_VERSION
+        value: "20"
       - key: NODE_ENV
         value: production
       - key: DATA_DIR
