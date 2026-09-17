@@ -32,28 +32,49 @@ const allowedOrigins = (process.env.CORS_ORIGINS || config.frontendUrl)
   .map((o) => o.trim())
   .filter(Boolean);
 
-// Dev conveniences: allow localhost variants and LAN dev servers.
-if (!isProduction) {
-  allowedOrigins.push(
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173'
-  );
-}
+/**
+ * Per-request CORS decision (cors delegate form).
+ *
+ * Scope: applied ONLY to Express-owned API paths — never to pages, /_next
+ * assets, or Payload routes. Next tags its own scripts with `crossorigin`,
+ * so a global CORS gate used to 403 the site's OWN chunk loads when the
+ * request's Origin (the site itself) wasn't in the allowlist — killing
+ * hydration on fresh deployments before FRONTEND_URL was ever set.
+ *
+ * Allowed on API routes:
+ *  - non-browser requests (no Origin header): curl, health probes
+ *  - same-origin requests (Origin host === Host header): the site calling
+ *    its own API — works even before FRONTEND_URL is configured
+ *  - explicit allowlist (CORS_ORIGINS / FRONTEND_URL)
+ *  - localhost variants in development only
+ */
+const corsDelegate: cors.CorsOptionsDelegate = (req, callback) => {
+  const origin = req.headers.origin;
+  const hostHeader = req.headers.host || '';
+  let allowed = !origin; // curl / server-to-server / health checks
 
-const corsOptions: cors.CorsOptions = {
-  origin(origin, callback) {
-    // Allow non-browser requests (curl, health checks, same-origin) with no Origin header.
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new AppError(`Origin ${origin} not allowed by CORS`, 403));
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400,
+  if (origin) {
+    try {
+      const o = new URL(origin);
+      if (o.host === hostHeader) allowed = true; // same-origin API call
+      else if (!isProduction && ['localhost', '127.0.0.1'].includes(o.hostname)) allowed = true;
+      else if (allowedOrigins.includes(origin)) allowed = true;
+    } catch {
+      allowed = false; // malformed Origin — deny
+    }
+  }
+
+  callback(null, {
+    // false => no ACAO header => the browser blocks cross-origin reads.
+    origin: allowed,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400,
+  });
 };
+
+const corsMiddleware = cors(corsDelegate);
 
 // --- Security headers: two production profiles -----------------------------
 // The unified deployment (single Render service) serves Express API routes and
@@ -89,13 +110,16 @@ const devHelmet = helmet({
   hsts: false,
 });
 
-// Routes Next.js owns in a unified deployment (pages, client assets, Payload
-// admin + REST + GraphQL). Everything else is Express API surface.
-const isNextOwnedPath = (p: string) =>
-  p.startsWith('/_next') ||
-  p.startsWith('/admin') ||
-  p.startsWith('/api/payload') ||
-  p.startsWith('/graphql');
+// Paths the Express API owns in a unified deployment: the JSON API and the
+// token-gated uploads static server. EVERYTHING else — pages, /_next assets,
+// /admin, Payload REST/GraphQL, /graphql — belongs to Next.js and must reach
+// it WITHOUT the strict API CSP. Next's SSR HTML relies on inline hydration
+// <script> tags; an API-grade `script-src 'self'` on page routes makes the
+// browser silently drop them, the app never hydrates, and users are stuck on
+// the splash screen (exactly the production bug this predicate fixed).
+const isApiOwnedPath = (p: string) =>
+  p.startsWith('/uploads') ||
+  (p.startsWith('/api/') && !p.startsWith('/api/payload'));
 
 export function createApp() {
   const app = express();
@@ -108,18 +132,22 @@ export function createApp() {
   // Security headers (profile chosen per route family — see above)
   app.use((req, res, next) => {
     if (isProduction) {
-      return (isNextOwnedPath(req.path) ? prodHelmetNext : prodHelmetApi)(req, res, next);
+      return (isApiOwnedPath(req.path) ? prodHelmetApi : prodHelmetNext)(req, res, next);
     }
     return devHelmet(req, res, next);
   });
 
-  // CORS
-  app.use(cors(corsOptions));
+  // CORS — API surfaces only (see corsDelegate docstring). Pages, /_next
+  // assets, and Payload routes pass through untouched.
+  app.use((req, res, next) => {
+    if (!isApiOwnedPath(req.path)) return next();
+    return corsMiddleware(req, res, next);
+  });
 
-  // Body parsers — skipped for Next-owned routes so Next route handlers
+  // Body parsers — only for Express-owned API routes, so Next route handlers
   // (Payload media uploads especially) read the raw request stream themselves.
   app.use((req, res, next) => {
-    if (isNextOwnedPath(req.path)) return next();
+    if (!isApiOwnedPath(req.path)) return next();
     express.json({ limit: '10mb' })(req, res, (err) => {
       if (err) return next(err);
       express.urlencoded({ extended: true, limit: '10mb' })(req, res, next);
