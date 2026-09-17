@@ -10,6 +10,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "payload:seed": "tsx src/seed-payload.ts",
+    "payload:types": "payload generate:types",
     "payload:start-prod": "next start"
   },
   "dependencies": {

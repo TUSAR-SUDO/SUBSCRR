@@ -8,7 +8,7 @@
     "dev:frontend": "npm --prefix frontend run dev",
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "start:all": "node server.mjs",
-    "build:render": "npm --prefix backend run build && npm --prefix frontend run payload:seed && npm --prefix frontend run build",
+    "build:render": "npm --prefix backend run build && npm --prefix frontend run payload:types && npm --prefix frontend run payload:seed && npm --prefix frontend run build",
     "seed": "npm --prefix backend run seed",
     "migrate": "npm --prefix backend run migrate",
     "test:backend": "npm --prefix backend run test",

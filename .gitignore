@@ -40,4 +40,5 @@ node_modules/
 # --- Payload CMS (content layer) ---
 frontend/subscrr-content.db*
 frontend/media-uploads/
-frontend/payload-types.ts
+# frontend/payload-types.ts  — COMMITTED intentionally: Render clones typecheck
+# against it during `next build` (Payload regenerates it on any collection change).
