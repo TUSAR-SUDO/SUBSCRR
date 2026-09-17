@@ -17,10 +17,11 @@ services:
     branch: main
     autoDeploy: true
     # Build and start commands — one repo, one service, no separate
-    # frontend/backend deploys. NOTE: --include=dev is REQUIRED on all three
-    # installs: NODE_ENV=production makes npm skip devDependencies (typescript,
-    # @types/*, tsx) and the build would fail without them.
-    buildCommand: npm install --include=dev && npm install --include=dev --prefix backend && npm install --include=dev --prefix frontend && npm run build:render
+    # frontend/backend deploys. No --include=dev needed: all build-critical
+    # packages (typescript, @types/*, tsx, tailwindcss) live in regular
+    # dependencies in both backend/ and frontend/ package.json, so the
+    # installs work even with NODE_ENV=production.
+    buildCommand: npm install && npm install --prefix backend && npm install --prefix frontend && npm run build:render
     startCommand: npm run start:all
     healthCheckPath: /api/health
     # Render rotates instances on deploy; only ONE instance may run the

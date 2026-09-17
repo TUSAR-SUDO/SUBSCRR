@@ -43,9 +43,8 @@ built Next.js app, which also hosts the Payload admin at `/admin`.
 1. **New → Web Service** → connect the repo.
 2. Settings:
    - **Root Directory:** leave **empty** (the unified server runs from the repo root)
-   - **Runtime:** Node
-   - **Build Command:** `npm install --include=dev && npm install --include=dev --prefix backend && npm install --include=dev --prefix frontend && npm run build:render`
-     (`--include=dev` is mandatory: `NODE_ENV=production` makes npm skip devDependencies — typescript, @types, tsx — and the build dies)
+   - **Runtime:** Node    - **Build Command:** `npm install && npm install --prefix backend && npm install --prefix frontend && npm run build:render`
+      (no `--include=dev` needed: typescript, @types, tsx, and tailwindcss are regular dependencies in both packages)
    - **Start Command:** `npm run start:all`
    - **Health Check Path:** `/api/health`
    - **Instance Type:** Starter or higher (needed for the persistent disk — Free cannot mount disks, so your data would be wiped on every deploy)
