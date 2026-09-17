@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Subscrr — Product &amp; User Guide</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #14141A; --paper: #F4F2EC; --accent: #FF2500; --muted: #7C766C;
+    --line: #E2DED4; --card: #FFFFFF;
+  }
+  body { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; }
+
+  .page { page-break-after: always; padding: 20mm 18mm; position: relative; height: 297mm; overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+
+  h1 { font-size: 40px; letter-spacing: -0.03em; line-height: 1.05; }
+  h2 { font-size: 24px; letter-spacing: -0.02em; margin-bottom: 4mm; }
+  h3 { font-size: 14px; margin-bottom: 2mm; }
+  p  { font-size: 11px; line-height: 1.55; color: #3a3a40; }
+  .muted { color: var(--muted); }
+  .kicker { font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 3mm; }
+
+  .cover { background: var(--ink); color: #fff; justify-content: center; }
+  .cover h1 { font-size: 64px; color: #fff; }
+  .cover h1 em { font-style: normal; color: var(--accent); }
+  .cover .sub { color: #A39E93; font-size: 15px; margin-top: 6mm; max-width: 130mm; line-height: 1.6; }
+  .cover .meta { margin-top: 22mm; font-size: 11px; color: #7C766C; line-height: 2; }
+  .cover .badge { display: inline-block; border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 2mm 5mm; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #A39E93; margin-bottom: 10mm; }
+  .logo-mark { width: 20mm; height: 20mm; border-radius: 5mm; background: var(--accent); color: #fff; font-weight: 900; font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 10mm; }
+
+  .lede { font-size: 13px; color: #2a2a30; max-width: 165mm; margin-bottom: 8mm; }
+  .shot { width: 100%; border: 1px solid var(--line); border-radius: 4mm; display: block; max-height: 78mm; object-fit: cover; object-position: top; }
+  .shot-frame { border: 1px solid var(--line); border-radius: 4mm; padding: 2mm; background: var(--paper); margin: 3mm 0 6mm; }
+  .caption { font-size: 9px; color: var(--muted); margin-top: 1.5mm; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .card { border: 1px solid var(--line); border-radius: 3mm; padding: 4.5mm; background: var(--card); }
+  .card h3 { font-size: 12px; }
+  .card p { font-size: 10px; color: var(--muted); margin-top: 1mm; }
+  .num { display: inline-flex; width: 7mm; height: 7mm; border-radius: 2.5mm; background: var(--accent); color: #fff; font-weight: 800; font-size: 11px; align-items: center; justify-content: center; margin-bottom: 2.5mm; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 10px; }
+  th { text-align: left; padding: 2.5mm 3mm; background: var(--ink); color: #fff; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; }
+  td { padding: 2.5mm 3mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #FAF8F5; }
+  .yes { color: #0a8a3a; font-weight: 700; }
+  .no { color: #b3261e; font-weight: 700; }
+
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 4mm; margin-bottom: 4.5mm; }
+  .step .n { flex: 0 0 8mm; height: 8mm; border-radius: 3mm; background: var(--ink); color: #fff; font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  .step div p { font-size: 10.5px; }
+  .step strong { font-size: 11.5px; display: block; margin-bottom: 0.5mm; }
+
+  .pill { display: inline-block; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 1.2mm 3.5mm; font-size: 9px; font-weight: 700; margin: 0 1.5mm 1.5mm 0; color: var(--ink); }
+  .foot { margin-top: auto; padding-top: 4mm; border-top: 1px solid var(--line); font-size: 8.5px; color: var(--muted); display: flex; justify-content: space-between; }
+  .highlight { background: #FFF4F1; border: 1px solid #FFD9CF; border-radius: 3mm; padding: 4mm 5mm; font-size: 10.5px; line-height: 1.55; }
+  .kbd { font-family: Consolas, monospace; background: #F0EDE6; border-radius: 1.5mm; padding: 0.5mm 2mm; font-size: 9.5px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="page cover">
+  <div class="logo-mark">S</div>
+  <div class="badge">Product &amp; User Guide · v1.0 · September 2026</div>
+  <h1>Take back control<br>of every <em>subscription</em><br>you pay for.</h1>
+  <p class="sub">Subscrr is a subscription-tracking platform that shows individuals and teams what they <strong style="color:#fff">really</strong> spend on recurring services — in one dashboard, in any currency — and warns them <strong style="color:#fff">before</strong> the next charge happens. This guide covers every feature, how the product differs from alternatives, and how the content platform is operated.</p>
+  <div class="meta">
+    Includes: full feature walkthrough · AI receipt scanning · notification system ·<br>
+    Payload CMS blog administration · platform comparison · technical architecture
+  </div>
+</section>
+
+<!-- WHAT & WHY -->
+<section class="page">
+  <div class="kicker">01 · The product</div>
+  <h2>What Subscrr does</h2>
+  <p class="lede">Banks show you money <strong>after</strong> it leaves. Subscrr shows you <strong>before</strong> — that one-day-early warning is the entire value proposition.</p>
+  <div class="two-col">
+    <div class="card"><span class="num">1</span><h3>Track everything recurring</h3><p>Every subscription in one ledger: price, currency, billing cycle, category, payment method, renewal date. Add manually, paste billing text, or scan a receipt with AI.</p></div>
+    <div class="card"><span class="num">2</span><h3>See the honest numbers</h3><p>Yearly plans are normalised to monthly equivalents, mixed currencies are converted to one display currency, and the true 12-month commitment is always visible.</p></div>
+    <div class="card"><span class="num">3</span><h3>Never be surprised</h3><p>A background engine generates renewal, trial-end and budget alerts, delivered as in-app notifications and real email — days before money leaves.</p></div>
+    <div class="card"><span class="num">4</span><h3>Analyse &amp; optimise</h3><p>Category breakdowns, 12-month spend projections, top-expense ranking and an interactive "subscription leak" calculator quantify the waste you can cancel.</p></div>
+  </div>
+  <div class="shot-frame" style="margin-top:8mm">
+    <img class="shot" src="guide-assets/01-landing.jpg">
+    <div class="caption">The public landing page — positioning the product around the "subscription leak" problem.</div>
+  </div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>2</span></div>
+</section>
+
+<!-- HOW IT WORKS + CALCULATOR -->
+<section class="page">
+  <div class="kicker">02 · How it works</div>
+  <h2>From sign-up to savings in four steps</h2>
+  <div class="steps" style="margin-bottom:6mm">
+    <div class="step"><div class="n">1</div><div><strong>Create an account</strong><p>Email + password with industry-standard security (hashed credentials, rate-limited login, brute-force lockout). A password-reset flow sends a real, single-use email link valid for one hour.</p></div></div>
+    <div class="step"><div class="n">2</div><div><strong>Add subscriptions — three ways</strong><p>Manual entry with brand colours &amp; icons · paste any confirmation email or bank line for parsing · or drop a receipt/invoice image into the AI Scanner.</p></div></div>
+    <div class="step"><div class="n">3</div><div><strong>Watch the dashboard normalise reality</strong><p>Monthly spend, annual commitment, daily burn, next charge — recalculated live, in your currency, across USD/EUR/GBP/INR/JPY/CAD/AUD.</p></div></div>
+    <div class="step"><div class="n">4</div><div><strong>Act on alerts before they cost you</strong><p>Renewal countdowns, trial-ending warnings and budget-threshold alerts arrive in-app and by email — so cancelling is a decision, not a discovery.</p></div></div>
+  </div>
+  <div class="shot-frame">
+    <img class="shot" src="guide-assets/02-landing-calculator.jpg">
+    <div class="caption">Interactive "leak calculator" on the landing page — visitors see their estimated annual waste before signing up.</div>
+  </div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>3</span></div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="page">
+  <div class="kicker">03 · Feature tour</div>
+  <h2>The dashboard — your financial summary</h2>
+  <div class="shot-frame"><img class="shot" src="guide-assets/07-dashboard.jpg">
+    <div class="caption">Overview: monthly spend, annual total, active services, next charge, upcoming renewals, top expenses and category split — all live.</div></div>
+  <div class="two-col" style="margin-top:2mm">
+    <div class="card"><h3>Everything is normalised</h3><p>A $100/year GitHub plan shows as its true monthly equivalent next to monthly bills, so the totals are honest.</p></div>
+    <div class="card"><h3>Multi-currency by design</h3><p>Track in USD, spend in INR — amounts convert to your display currency using live rates, per-subscription.</p></div>
+  </div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>4</span></div>
+</section>
+
+<!-- SUBSCRIPTIONS + AI SCANNER -->
+<section class="page">
+  <div class="kicker">04 · Feature tour</div>
+  <h2>Managing subscriptions &amp; the AI Receipt Scanner</h2>
+  <div class="shot-frame"><img class="shot" src="guide-assets/09-subscriptions.jpg">
+    <div class="caption">Subscription ledger: search, filter by category/status/cycle, edit inline, pause or cancel, export to CSV/JSON.</div></div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/12-ai-scanner.jpg">
+    <div class="caption">AI Receipt Scanner — drop a real invoice image or paste billing text; a vision model extracts merchant, actual amount, cycle, renewal date and brand colour. No demo data: undeterminable fields are flagged, never invented.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>5</span></div>
+</section>
+
+<!-- ANALYTICS + CALENDAR -->
+<section class="page">
+  <div class="kicker">05 · Feature tour</div>
+  <h2>Analytics &amp; the renewal calendar</h2>
+  <div class="shot-frame"><img class="shot" src="guide-assets/10-analytics.jpg">
+    <div class="caption">Analytics: category breakdown, 12-month spend projection and monthly trends in the display currency.</div></div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/11-calendar.jpg">
+    <div class="caption">Renewal Calendar: every upcoming charge mapped to its exact day, with a day inspector and month total.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>6</span></div>
+</section>
+
+<!-- NOTIFICATIONS + SETTINGS -->
+<section class="page">
+  <div class="kicker">06 · Feature tour</div>
+  <h2>Notifications &amp; account settings</h2>
+  <div class="shot-frame"><img class="shot" src="guide-assets/08-notifications.jpg">
+    <div class="caption">Notification centre: renewal, trial-ending, budget and system alerts. Click to mark read (animated ✓), or dismiss permanently (slide-out) — mirrored by real email delivery.</div></div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/13-settings.jpg">
+    <div class="caption">Settings: profile, display currency, monthly budget and per-channel email alert preferences.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>7</span></div>
+</section>
+
+<!-- CMS -->
+<section class="page">
+  <div class="kicker">07 · Content platform</div>
+  <h2>Payload CMS — the built-in blog engine</h2>
+  <p class="lede">The marketing blog runs on <strong>Payload CMS 3</strong>, embedded directly inside the Next.js application — a database-backed, admin-editable content system with draft workflow and version history. No code deploys needed to publish an article.</p>
+  <div class="highlight" style="margin-bottom:6mm">
+    <strong>Where it is &amp; how to log in:</strong><br>
+    Admin panel URL: <span class="kbd">/admin</span> (e.g. <span class="kbd">http://localhost:3000/admin</span>)<br>
+    CMS admin account (separate from app users): <span class="kbd">admin@subscrr.local</span> / <span class="kbd">ChangeMe-Payload-2026!</span> — change via <span class="kbd">PAYLOAD_ADMIN_EMAIL</span> / <span class="kbd">PAYLOAD_ADMIN_PASSWORD</span> env vars before re-seeding.<br>
+    Workflow: edit a post → <em>Publish changes</em> → live on <span class="kbd">/blog</span> within ~60 seconds. <em>Save Draft</em> hides it from the public site. Every change is versioned (20 versions per document).
+  </div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/16-payload-posts.jpg">
+    <div class="caption">Payload admin — Posts collection: all articles with status (published/draft), author and timestamps.</div></div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/17-payload-post-editor.jpg">
+    <div class="caption">The Lexical rich-text editor: headings, lists, images, publish controls and version history in the sidebar.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>8</span></div>
+</section>
+
+<!-- CMS 2 -->
+<section class="page">
+  <div class="kicker">08 · Content platform</div>
+  <h2>Media library &amp; admin roles</h2>
+  <div class="shot-frame"><img class="shot" src="guide-assets/18-payload-media.jpg">
+    <div class="caption">Media collection: uploaded images with required alt text; responsive size variants generated automatically and served through the app's image pipeline.</div></div>
+  <div class="two-col">
+    <div class="card"><h3>Three collections</h3><p><strong>Posts</strong> (title, excerpt, rich body, hero image, slug, category, tags, publish date), <strong>Media</strong> (image assets), <strong>Blog Authors</strong> (CMS logins — deliberately separate from application accounts).</p></div>
+    <div class="card"><h3>Why embedded CMS matters</h3><p>One deploy, one domain, one auth boundary for app + content; REST &amp; GraphQL APIs namespaced under <span class="kbd">/api/payload</span> so they never collide with the product API.</p></div>
+  </div>
+  <div class="shot-frame" style="margin-top:4mm"><img class="shot" src="guide-assets/04-blog.jpg">
+    <div class="caption">The public blog rendered from the CMS — SEO metadata, JSON-LD structured data and ISR revalidation included.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>9</span></div>
+</section>
+
+<!-- COMPARISON -->
+<section class="page">
+  <div class="kicker">09 · Positioning</div>
+  <h2>How Subscrr compares</h2>
+  <p class="lede">The subscription-tracking space splits into manual ledger apps and bank-aggregation tools. Subscrr takes a third path: manual + AI-assisted tracking with a privacy-first, multi-currency core.</p>
+  <table>
+    <tr><th style="width:26%"></th><th>Subscrr</th><th>Bank-aggregation apps<br><span style="font-weight:400;text-transform:none">(Rocket Money, Copilot)</span></th><th>Manual ledger apps<br><span style="font-weight:400;text-transform:none">(Bobby, Notion trackers)</span></th></tr>
+    <tr><td><strong>Works without bank credentials</strong></td><td class="yes">Yes — nothing to connect</td><td class="no">No — requires read access to accounts</td><td class="yes">Yes</td></tr>
+    <tr><td><strong>AI receipt / invoice extraction</strong></td><td class="yes">Yes — vision model, real amounts</td><td class="no">No (transaction matching only)</td><td class="no">No</td></tr>
+    <tr><td><strong>Proactive renewal &amp; trial alerts by email</strong></td><td class="yes">Yes — before the charge</td><td>Partial</td><td class="no">Rarely / manual</td></tr>
+    <tr><td><strong>True multi-currency with conversion</strong></td><td class="yes">Yes — per-subscription</td><td>Limited to bank locale</td><td class="no">Usually static</td></tr>
+    <tr><td><strong>Built-in CMS blog for the brand</strong></td><td class="yes">Yes — Payload, embedded</td><td class="no">No</td><td class="no">No</td></tr>
+    <tr><td><strong>Self-hostable / data ownership</strong></td><td class="yes">Yes — SQLite files, containerised</td><td class="no">No — cloud only</td><td>Varies</td></tr>
+    <tr><td><strong>Cross-platform web + iOS/watch positioning</strong></td><td class="yes">Yes</td><td>Yes</td><td>Mobile-only often</td></tr>
+  </table>
+  <div class="highlight" style="margin-top:6mm">
+    <strong>The differentiator in one line:</strong> Subscrr delivers the foresight of bank-aggregation tools without asking for bank access — using AI extraction on receipts instead — and packages a complete content platform for the brand in the same deploy.
+  </div>
+  <div class="shot-frame" style="margin-top:6mm"><img class="shot" src="guide-assets/03-landing-pricing.jpg">
+    <div class="caption">Pricing presented on the public site — freemium-ready funnel from landing page to waitlist capture.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>10</span></div>
+</section>
+
+<!-- TECHNICAL -->
+<section class="page">
+  <div class="kicker">10 · Under the hood</div>
+  <h2>Technical architecture</h2>
+  <div class="two-col" style="margin-bottom:6mm">
+    <div class="card"><h3>Stack</h3><p>Next.js 16 (React 19) frontend · Express API with Helmet, CORS allow-listing and four scoped rate limiters · SQLite with integer-cent money math and versioned migrations · Payload 3 CMS · Nodemailer/Resend email · Docker + GitHub Actions CI.</p></div>
+    <div class="card"><h3>Security posture</h3><p>JWT auth with pinned algorithm · per-account login lockout · hashed single-use reset tokens · authenticated private file serving · CSV formula-injection sanitisation · secrets fail-safe boot checks.</p></div>
+    <div class="card"><h3>Data model</h3><p>Users, subscriptions (cents-stored amounts, cycle normalisation), notifications, activity logs, waitlist leads — plus a separate content database for the CMS. Full CSV/JSON export keeps data portable.</p></div>
+    <div class="card"><h3>Operations</h3><p>Health endpoint with live DB verification · daily alert cron · structured activity logging · persistent volumes · one-command seed for demo environments.</p></div>
+  </div>
+  <div class="shot-frame"><img class="shot" src="guide-assets/14-admin-portal.jpg">
+    <div class="caption">Built-in Admin Portal (product admins): platform statistics — registered users, tracked subscriptions, platform MRC, waitlist leads — and a user directory.</div></div>
+  <div class="foot"><span>Subscrr — Product &amp; User Guide</span><span>11</span></div>
+</section>
+
+<!-- BACK COVER -->
+<section class="page cover" style="justify-content:center">
+  <div class="logo-mark">S</div>
+  <h1 style="font-size:44px">Subscrr</h1>
+  <p class="sub">Know what you pay. Before you pay it.<br><br>
+  <span style="color:#fff;font-weight:700">Quick reference</span><br>
+  App sign-in: <span class="kbd" style="background:rgba(255,255,255,0.1);color:#fff">/login</span> · CMS admin: <span class="kbd" style="background:rgba(255,255,255,0.1);color:#fff">/admin</span> · API health: <span class="kbd" style="background:rgba(255,255,255,0.1);color:#fff">/api/health</span><br>
+  Data export: Subscriptions → Export CSV/JSON</p>
+  <div class="meta">Prepared September 2026 · Subscrr — Product &amp; User Guide · This document was generated from the live product.</div>
+</section>
+
+</body>
+</html>

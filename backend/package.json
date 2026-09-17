@@ -1,0 +1,61 @@
+{
+  "name": "subscrr-backend",
+  "version": "1.0.0",
+  "description": "Subscrr REST API backend with SQLite, JWT Auth, Analytics, and AI Receipt Scanner",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "seed": "tsx src/db/seed.ts",
+    "migrate": "tsx src/db/migrate.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "subscription-tracker",
+    "express",
+    "sqlite",
+    "jwt",
+    "analytics"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.12.1",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^10.0.10",
+    "sqlite3": "^6.0.1",
+    "tesseract.js": "^7.0.0",
+    "uuid": "^13.0.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^1.4.13",
+    "@types/node": "^20.19.38",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^8.0.1",
+    "@types/sqlite3": "^3.1.11",
+    "@types/supertest": "^7.2.1",
+    "@types/uuid": "^10.0.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

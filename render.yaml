@@ -1,0 +1,68 @@
+# Render Blueprint — ONE web service runs the entire Subscrr app:
+# Express API + Next.js frontend + Payload CMS admin, single port.
+#
+# Deploy options:
+#   A) Blueprint: push this repo to GitHub → Render Dashboard → New →
+#      Blueprint → point at the repo → Render reads this file.
+#   B) Manual: create one Web Service with the same commands/values below.
+#
+# Full walkthrough: docs/DEPLOY-RENDER.md
+
+services:
+  - type: web
+    name: subscrr
+    runtime: node
+    plan: starter            # persistent disk requires a paid plan
+    region: oregon
+    branch: main
+    autoDeploy: true
+    # Build and start commands — one repo, one service, no separate
+    # frontend/backend deploys.
+    buildCommand: npm run build:render
+    startCommand: npm run start:all
+    healthCheckPath: /api/health
+    # Render rotates instances on deploy; only ONE instance may run the
+    # alert scheduler + SQLite writes at a time.
+    maxShutdownDelaySeconds: 30
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    # Persistent disk: SQLite app DB, Payload content DB, media, uploads
+    # all live here so data survives redeploys. WITHOUT this, every deploy
+    # wipes user data.
+    disk:
+      name: subscrr-data
+      mountPath: /opt/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /opt/data
+      - key: DB_PATH
+        value: /opt/data/subscrr.db
+      - key: UPLOAD_DIR
+        value: /opt/data/uploads
+      - key: PAYLOAD_DATABASE_URI
+        value: file:/opt/data/subscrr-content.db
+      - key: PAYLOAD_MEDIA_DIR
+        value: /opt/data/media-uploads
+      # --- Secrets: set these in the Render dashboard (Environment tab),
+      # --- never commit them. Generate JWT_SECRET with:
+      # ---   node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+      - key: JWT_SECRET
+        sync: false
+      - key: PAYLOAD_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: PAYLOAD_ADMIN_PASSWORD
+        sync: false
+      # Public URL of this service (reset emails, Payload absolute URLs).
+      # Set after first deploy, e.g. https://subscrr.onrender.com
+      - key: FRONTEND_URL
+        sync: false
+      # Optional integrations — leave unset to run without them:
+      # SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / EMAIL_FROM (real email)
+      # OPENAI_API_KEY (AI vision receipt scanning)
+      # OPENAI_BASE_URL / OPENAI_MODEL (alternate providers)
