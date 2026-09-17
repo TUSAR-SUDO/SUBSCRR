@@ -105,6 +105,41 @@ built Next.js app, which also hosts the Payload admin at `/admin`.
   posts + images seeded during build from `frontend/public/assets/blog`
 - **Directories** — uploads/ and media-uploads/ created automatically
 
+## Deploying on the Free tier (no payment)
+
+Free instances have **no persistent disks** — the filesystem is rebuilt from
+your last deploy every time the service wakes up (after ~15 min idle) or
+redeploys. The app is built for this: migrations, the admin account and all 6
+blog posts re-provision automatically on every boot, so the site always comes
+back complete. What resets is **user-registered data** (accounts,
+subscriptions created after boot).
+
+1. Use the same Build/Start commands and Health Check Path as Option B.
+2. **Skip Add Disk entirely** (the section doesn't exist on Free).
+3. Point the data paths at the repo checkout (`/opt/render/project/src` is
+   Render's documented working directory for native Node services):
+
+   ```
+   DB_PATH              = /opt/render/project/src/data/subscrr.db
+   UPLOAD_DIR           = /opt/render/project/src/uploads
+   PAYLOAD_DATABASE_URI = file:/opt/render/project/src/frontend/subscrr-content.db
+   PAYLOAD_MEDIA_DIR    = /opt/render/project/src/frontend/media-uploads
+   ```
+
+   (All other env vars are identical to the paid setup.)
+4. **Add an uptime pinger** (UptimeRobot / cron-job.org, every 5–10 min →
+   `https://<your-url>/api/health`). On Free this is not optional polish: it
+   prevents spin-down, which both avoids 50-second cold starts AND keeps the
+   filesystem (and your data) alive until the next deploy. One always-on free
+   service fits inside Render's 750 free instance-hours.
+5. Set **Auto-Deploy → Off** while demoing if you plan to push code — every
+   deploy resets the data disk.
+
+**Honest summary:** Free tier = demo/evaluation deployment. Perfect for
+showing the product; not for accumulating real user data. When you're ready
+for that: paid plan + disk, or migrate the app DB to a free external Postgres
+(Neon/Supabase) and keep Render Free compute.
+
 ## The one caveat you must know: cold starts
 
 Render's free/starter tier **spins the service down after ~15 min idle**. The
