@@ -1250,6 +1250,12 @@ section { position: relative; }
 
 @media (max-width: 768px) {
   .nav__links { display: none; }
+  /* Phone nav pill: tighter chrome so brand + CTA never crowd or clip.
+     (Sign In is hidden below sm via Tailwind in Nav.tsx.) */
+  .nav { width: calc(100% - 24px); padding: 10px 10px 10px 16px; }
+  .nav__brand { font-size: 15px; gap: 8px; }
+  .nav__brand-icon { width: 26px; height: 26px; }
+  .nav .btn--sm { font-size: 13px; padding: 8px 14px; }
   .hero { padding: 100px 24px 60px; }
   .hero__title { font-size: clamp(40px, 9vw, 64px); }
   .split__text { padding: 48px 32px; }

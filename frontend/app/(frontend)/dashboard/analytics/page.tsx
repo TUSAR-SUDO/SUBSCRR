@@ -160,13 +160,13 @@ export default function AnalyticsPage() {
           <div className="flex flex-col gap-4">
             {categories.map((cat) => (
               <div key={cat.category} className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE6DC]">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-3.5 h-3.5 rounded-md" style={{ backgroundColor: cat.color }} />
-                    <span className="text-sm font-bold text-[#1A1712]">{cat.category}</span>
-                    <span className="text-xs text-[#7C766C]">({cat.count} services)</span>
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 mb-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="w-3.5 h-3.5 rounded-md shrink-0" style={{ backgroundColor: cat.color }} />
+                    <span className="text-sm font-bold text-[#1A1712] truncate">{cat.category}</span>
+                    <span className="text-xs text-[#7C766C] shrink-0">({cat.count} services)</span>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <span className="text-sm font-black text-[#1A1712]">
                       {formatMoney(cat.monthlyAmount, currency)}/mo
                     </span>

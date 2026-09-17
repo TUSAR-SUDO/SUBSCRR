@@ -44,12 +44,17 @@ export default function Nav() {
           </Link>
         ) : (
           <>
-            <Link
-              href="/login"
-              className="btn btn--ghost btn--sm !px-3 hidden sm:inline-flex items-center gap-1"
-            >
-              <span>Sign In</span>
-            </Link>
+            {/* Tailwind-only wrapper: the .btn classes are unlayered CSS and
+                would defeat a `hidden` utility on the link itself — this span
+                makes the Sign In button genuinely hidden below `sm`. */}
+            <span className="hidden sm:inline-flex items-center">
+              <Link
+                href="/login"
+                className="btn btn--ghost btn--sm !px-3 items-center gap-1"
+              >
+                <span>Sign In</span>
+              </Link>
+            </span>
             <Link
               href="/dashboard"
               className="btn btn--solid btn--sm flex items-center gap-1.5 !px-4"
